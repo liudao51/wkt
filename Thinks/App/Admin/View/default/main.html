@@ -1,0 +1,503 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>微看头 - 管理平台 </title>
+    <script type="text/javascript" src="__ROOT__/public/runtime/admin/lang.js"></script>
+    <script type="text/javascript">
+        var version = '{:app_conf("DB_VERSION")}';
+        var VAR_MODULE = "{:conf("VAR_MODULE")}";
+        var VAR_ACTION = "{:conf("VAR_ACTION")}";
+        var ROOT = '__APP__';
+        var ROOT_PATH = '<PHP>echo APP_ROOT;</PHP>';
+        var app_type = '{$apptype}';
+        var ofc_swf = '__TMPL__Common/js/open-flash-chart.swf';
+        var sale_line_data_url = '{:urlencode(u("Ofc/sale_line"))}';
+        var sale_refund_data_url = '{:urlencode(u("Ofc/sale_refund"))}';
+    </script>
+    <load href='__TMPL__Common/style/style.css' />
+    <load href='__TMPL__Common/style/main.css' />
+    <load href='__TMPL__Common/js/swfobject.js' />
+    <load href='__TMPL__Common/js/jquery.js' />
+    <load href='__TMPL__Common/js/main.js' />
+</head>
+
+<body>
+
+
+
+<!--
+	新版开始
+-->
+<div class="main">
+    <div class="main_title">{:conf("APP_NAME")}{:l("ADMIN_PLATFORM")} {%HOME}	</div>
+    <div class="notify_box">
+        <table>
+            <tr>
+
+                <td class="statbox tuan_box">
+                    <table>
+                        <tr>
+                            <th>贷款相关</th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="row">
+                                    <span class="t">待审核的借款：</span><span class="bx"><a href="{:u("Deal/publish")}" <if condition="$wait_deal_count gt 0">style="color:#f60;"</if>>{$wait_deal_count}待初核</a>&nbsp;<a href="{:u("Deal/true_publish")}" <if condition="$wait_deal_review_count gt 0">style="color:#f60;"</if>>{$wait_deal_review_count}待复核</a></span>
+                                    <div class="blank0"></div>
+                                </div>
+                                <div class="row">
+                                    <span class="t">等待材料的借款:</span><span class="bx">	<a href="{:u("Deal/wait")}" <if condition="$info_deal_count gt 0">style="color:#f60;"</if>>{$info_deal_count}等待材料</a></span>
+                                    <div class="blank0"></div>
+                                </div>
+                                <div class="row">
+                                    <span class="t">满标的借款：</span><span class="bx"><a href="{:u("Deal/full")}" <if condition="$suc_deal_count gt 0">style="color:#f60;"</if>>{$suc_deal_count}满标</a></span>
+                                    <div class="blank0"></div>
+                                </div>
+                                <div class="row">
+                                    <span class="t">需返还保证金：</span><span class="bx"><a href="{:u("Deal/need_un_freezen",array('status'=>1))}" <if condition="$need_un_freezen_count gt 0">style="color:#f60;"</if>>{$need_un_freezen_count}需返还</a>&nbsp;[非托管]</span>
+                                    <div class="blank0"></div>
+                                </div>
+                                <div class="row">
+                                    <span class="t">三日内需还借款：</span><span class="bx"><a href="{:u("Deal/three",array('status'=>1))}" <if condition="$threeday_repay_count gt 0">style="color:#f60;"</if>>{$threeday_repay_count}期需还款</a></span>
+                                    <div class="blank0"></div>
+                                </div>
+                                <div class="row">
+                                    <span class="t">逾期未还的借款：</span><span class="bx"><a href="{:u("Deal/yuqi")}" <if condition="$yq_repay_count gt 0">style="color:#f60;"</if>>{$yq_repay_count}笔逾期</a></span>
+                                    <div class="blank0"></div>
+                                </div>
+
+                            </td>
+                        </tr>
+                    </table>
+                </td><!--tuan_box 团购提醒-->
+
+                <td class="statbox user_box">
+                    <table>
+                        <tr>
+                            <th>会员相关</th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="row">
+                                    <span class="t">{%TOTAL_REG_USER_COUNT}：</span><span class="bx"><PHP>echo sprintf(L("TOTAL_USER_COUNT_FORMAT"),$total_user,$total_verify_user);</PHP></span>
+                                    <div class="blank0"></div>
+                                </div>
+                                <div class="row">
+                                    <span class="t">注册待验证：</span><span class="bx"><a href="{:u("User/register")}" <if condition="$register_count gt 0">style="color:#f60;"</if>>{$register_count}待审核的普通会员</a></span>
+                                    <div class="blank0"></div>
+                                </div>
+                                <div class="row">
+                                    <span class="t"></span><span class="bx"><a href="{:u("User/company_register")}" <if condition="$company_register_count gt 0">style="color:#f60;"</if>>{$company_register_count}待审核的企业会员</a></span>
+                                    <div class="blank0"></div>
+                                </div>
+
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+
+                <td class="statbox store_box">
+                    <table>
+                        <tr>
+                            <th>认证相关</th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="row">
+                                    <span class="t">待审核的认证:</span><span class="bx"><a href="{:u("Credit/user_wait")}" <if condition="$auth_count gt 0">style="color:#f60;"</if>>{$auth_count}待审核</a></span>
+                                    <div class="blank0"></div>
+                                </div>
+                                <div class="row">
+                                    <span class="t">授信额度申请：</span><span class="bx"><a href="{:u("DealQuotaSubmit/index",array("status"=>0))}" <if condition="$deal_quota_count gt 0">style="color:#f60;"</if>>{$deal_quota_count}待处理</a></span>
+                                    <div class="blank0"></div>
+                                </div>
+                                <div class="row">
+                                    <span class="t">额度申请：</span><span class="bx"><a href="{:u("QuotaSubmit/index",array("status"=>0))}" <if condition="$quota_count gt 0">style="color:#f60;"</if>>{$quota_count}待处理</a></span>
+                                    <div class="blank0"></div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </td><!--shop_box 商城提醒-->
+
+            </tr>
+
+            <tr>
+
+
+
+                <td class="statbox event_box">
+                    <table>
+                        <tr>
+                            <th>其他申请</th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="row">
+                                    <span class="t">提现申请：</span><span class="bx"><a href="{:u("UserCarry/index",array("status"=>0))}" <if condition="$carry_count gt 0">style="color:#f60;"</if>>{$carry_count}提现申请</a></span>
+                                    <div class="blank0"></div>
+                                </div>
+                                <div class="row">
+                                    <span class="t">待处理续约申请：</span><span class="bx"><a href="{:u("GenerationRepaySubmit/index")}" <if condition="$generation_repay_submit gt 0">style="color:#f60;"</if>>{$generation_repay_submit}待处理</a></span>
+                                    <div class="blank0"></div>
+                                </div>
+                                <div class="row">
+                                    <span class="t">待处理举报：</span><span class="bx"><a href="{:u("Reportguy/index",array("status"=>0))}" <if condition="$reportguy_count gt 0">style="color:#f60;"</if>>{$reportguy_count}待处理</a></span>
+                                    <div class="blank0"></div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </td><!--youhui_box 优惠券提醒-->
+
+                <td class="statbox youhui_box">
+                    <table>
+                        <tr>
+                            <th>充值统计</th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="row">
+                                    <span class="t">充值成交：</span><span class="bx">{$incharge_order_buy_count}</span>
+                                    <div class="blank0"></div>
+                                </div>
+                                <div class="row">
+                                    <span class="t">新充值单：</span><span class="bx"><a href="{:u("PaymentNotice/index")}">{$reminder.incharge_count}</a></span>
+                                    <div class="blank0"></div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </td><!--event_box 活动提醒-->
+                <td class="statbox shop_box">
+                    <table>
+                        <tr>
+                            <th>其他</th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="row">
+									<span class="t">
+										快捷导航
+									</span>
+									<span class="bx">
+										<select name="nav" id="J_nav">
+                                            <foreach name="navs" item="nav">
+                                                <option value="{$nav.key}">{$nav.name}</option>
+                                            </foreach>
+                                        </select>
+										<select name="m" id="J_m">
+
+                                        </select>
+										<select name="a" id="J_a">
+
+                                        </select>
+									</span>
+                                    <div class="blank0"></div>
+                                </div>
+                                <div class="row">
+                                    <span class="t">{%CURRENT_VERSION}：</span><span class="bx">{%APP_VERSION}:{:conf("DB_VERSION")}</span>
+                                    <div class="blank0"></div>
+                                </div>
+                                <div class="row">
+                                    <span class="t">网站数据统计：</span><span class="bx"><a href="{:u("Index/statistics")}">查看</a></span>
+                                    <div class="blank0"></div>
+                                </div>
+                                <div class="row">
+                                    <span class="t">{%CURRENT_TIME}：</span><span class="bx"><PHP> echo to_date(get_gmtime());</PHP></span>
+                                    <div class="blank0"></div>
+                                </div>
+
+                            </td></tr>
+                    </table>
+                </td><!--store_box 门店提醒-->
+            </tr>
+            <tr>
+                <if condition="C('PEIZI_OPEN') eq 1">
+                    <td class="statbox event_box">
+                        <table>
+                            <tr>
+                                <th>股票配资审核</th>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="row">
+                                        <span class="t">待审核：</span>
+                                    <span class="bx">
+                                    	<a href="{:u("PeiziOrder/pzop1")}">{$pz_waite_count}待审核</a></span>
+                                        </span>
+                                        <div class="blank0"></div>
+                                    </div>
+                                    <div class="row">
+                                        <span class="t">待筹款：</span>
+                                    <span class="bx">
+                                    	<a href="{:u("PeiziOrder/pzop2")}">{$pz_waite_money_count}待筹款</a>
+                                    </span>
+                                        <div class="blank0"></div>
+                                    </div>
+                                    <div class="row">
+                                        <span class="t">待开户：</span>
+                                    <span class="bx">
+                                    	<a href="{:u("PeiziOrder/pzop4")}">{$pz_waite_open_count}待开户</a>
+                                    </span>
+                                        <div class="blank0"></div>
+                                    </div>
+                                    <div class="row">
+                                        <span class="t">操盘中：</span>
+                                    <span class="bx">
+                                    	<a href="{:u("PeiziOrder/pzop6")}">{$pz_ing_count}操盘中</a>
+                                    </span>
+                                        <div class="blank0"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </td><!--youhui_box 优惠券提醒-->
+                    <td class="statbox event_box">
+                        <table>
+                            <tr>
+                                <th>股票配资</th>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="row">
+                                        <span class="t">今天扣费：</span>
+                                    <span class="bx">
+                                    	<a href="{:u("PeiziOrder/fee_date")}">{$pz_cost_money_count}扣费</a>
+                                    </span>
+                                        <div class="blank0"></div>
+                                    </div>
+                                    <div class="row">
+                                        <span class="t">催单：</span>
+                                    <span class="bx">
+                                    	<a href="{:u("PeiziOrder/next_fee_date")}">{$pz_cd}催单</a>
+                                    </span>
+                                        <div class="blank0"></div>
+                                    </div>
+                                    <div class="row">
+                                        <span class="t">快到期：</span>
+                                    <span class="bx">
+                                    	<a href="{:u("PeiziOrder/next_end_date")}">{$pz_next_end_date}催单</a>
+                                    </span>
+                                        <div class="blank0"></div>
+                                    </div>
+                                    <div class="row">
+                                        <span class="t">预警线：</span>
+                                    <span class="bx">
+                                    	<a href="{:u("PeiziOrder/warning_line")}">{$pz_warning_line}预警线</a>
+                                    </span>
+                                        <div class="blank0"></div>
+                                    </div>
+                                    <div class="row">
+                                        <span class="t">平仓线：</span>
+                                    <span class="bx">
+                                    	<a href="{:u("PeiziOrder/open_line")}">{$pz_open_line}平仓线</a>
+                                    </span>
+                                        <div class="blank0"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td class="statbox event_box">
+                        <table>
+                            <tr>
+                                <th>股票配资操作审核</th>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="row">
+                                        <span class="t">待出资人审核：</span>
+                                    <span class="bx">
+                                    	<a href="{:u("PeiziOrderOp/op0")}">{$pz_op0}平仓线</a>
+                                    </span>
+                                        <div class="blank0"></div>
+                                    </div>
+                                    <div class="row">
+                                        <span class="t">待平台审核：</span>
+                                    <span class="bx">
+                                    	<a href="{:u("PeiziOrderOp/op01")}">{$pz_op01}平仓线</a>
+                                    </span>
+                                        <div class="blank0"></div>
+                                    </div>
+                                    <div class="row">
+                                        <span class="t">待复审：</span>
+                                    <span class="bx">
+                                    	<a href="{:u("PeiziOrderOp/op2")}">{$pz_op02}平仓线</a>
+                                    </span>
+                                        <div class="blank0"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+            </tr>
+            <tr>
+                </if>
+                <if condition="C('LICAI_OPEN') eq 1">
+                    <td class="statbox event_box">
+                        <table>
+                            <tr>
+                                <th>理财统计</th>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="row">
+                                        <span class="t">待审核理财：</span>
+                                    <span class="bx">
+                                    	<a href="{:u("Licai/verify")}">{$licai_verify_count}个</a>
+                                    </span>
+                                        <div class="blank0"></div>
+                                    </div>
+                                    <div class="row">
+                                        <span class="t">理财统计：</span>
+                                    <span class="bx">
+                                    	<a href="{:u("Licai/index")}">{$licai_count}个</a>
+                                    </span>
+                                        <div class="blank0"></div>
+                                    </div>
+                                    <div class="row">
+                                        <span class="t">订单统计：</span>
+                                    <span class="bx">
+                                    	<a href="{:u("LicaiOrder/order_list")}">{$licai_order_count}个</a>
+                                    </span>
+                                        <div class="blank0"></div>
+                                    </div>
+                                    <div class="row">
+                                        <span class="t">垫付单：</span>
+                                    <span class="bx">
+                                    	<a href="{:u("LicaiAdvance/index")}">{$licai_advance_count}个</a>
+                                    </span>
+                                        <div class="blank0"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </td><!--youhui_box 优惠券提醒-->
+                    <td class="statbox event_box">
+                        <table>
+                            <tr>
+                                <th>赎回统计</th>
+                            </tr>
+                            <tr>
+                                <td>
+
+
+                                    <div class="row">
+                                        <span class="t">理财期赎回：</span>
+                                    <span class="bx">
+                                    	<a href="{:u("LicaiRedempte/index")}">{$licai_redempte_count}个</a>
+                                    </span>
+                                        <div class="blank0"></div>
+                                    </div>
+                                    <div class="row">
+                                        <span class="t">预热期赎回：</span>
+                                    <span class="bx">
+                                    	<a href="{:u("LicaiRedempte/before_index")}">{$licai_wait_redempte_count}个</a>
+                                    </span>
+                                        <div class="blank0"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </td><!--youhui_box 优惠券提醒-->
+                    <td class="statbox event_box">
+                        <table>
+                            <tr>
+                                <th>理财发放统计</th>
+                            </tr>
+                            <tr>
+                                <td>
+
+
+                                    <div class="row">
+                                        <span class="t">快到期：</span>
+                                    <span class="bx">
+                                    	<a href="{:u("LicaiNear/index")}">{$licai_near_count}个</a>
+                                    </span>
+                                        <div class="blank0"></div>
+                                    </div>
+                                    <div class="row">
+                                        <span class="t">已发放：</span>
+                                    <span class="bx">
+                                    	<a href="{:u("LicaiSend/index")}">{$licai_send_count}个</a>
+                                    </span>
+                                        <div class="blank0"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </if>
+            </tr>
+        </table>
+    </div>
+    <div class="blank5"></div>
+    <div class="blank5"></div>
+    <div class="blank5"></div>
+    <div class="blank5"></div>
+
+    <div class="main_title">最近30天运营数据</div>
+    <table width=100%>
+
+        <tr>
+            <td width=10>&nbsp;</td>
+            <td width=90%>
+                <div id="sale_line_data_chart"></div>
+            </td>
+            <td width=10>&nbsp;</td>
+        </tr>
+    </table>
+
+    <script type="text/javascript">
+        var nav_json_data = <php>echo json_encode($navs);</php>;
+        loadModule();
+        $("#J_nav").change(function(){
+            loadModule();
+        });
+        $("#J_m").change(function(){
+            loadAction();
+        });
+        function loadModule(){
+            var nav =$("#J_nav").val();
+            var html = "";
+            $.each(nav_json_data,function(i,v){
+                if(i==nav){
+                    $.each(v.groups,function(ii,vv){
+                        html += '<option value="'+ii+'">'+vv.name+'</option>';
+                    });
+                }
+            });
+
+            $("#J_m").html(html);
+            loadAction();
+        }
+
+        function loadAction(){
+            var nav =$("#J_nav").val();
+            var m =  $("#J_m").val();
+            var a_html = '<option value="">请选择</option>';
+            $.each(nav_json_data,function(i,v){
+                if(i==nav){
+                    $.each(v.groups,function(ii,vv){
+                        if(ii==m){
+                            $.each(vv.nodes,function(iii,vvv){
+                                a_html += '<option value="'+vvv.action+'" module="'+vvv.module+'">'+vvv.name+'</option>';
+                            });
+                        }
+                    });
+                }
+            });
+
+            $("#J_a").html(a_html);
+        }
+
+        $("#J_a").change(function(){
+            if($.trim($(this).val())!=""){
+                location.href = ROOT + '?m='+$(this).find("option:selected").attr("module")+'&a='+$(this).val();
+            }
+        })
+    </script>
+</body>
+</html>
